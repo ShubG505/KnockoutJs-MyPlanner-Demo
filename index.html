@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>My Planner</title>
+		<link rel="stylesheet" href="css/index.css">
+	</head>
+	<body>
+		<section class="my-planner">
+			<header class="header">
+				<h1>My Planner</h1>
+				<input class="new-plan" data-bind="value: current, valueUpdate: 'afterkeydown', enterKey: add" placeholder="What needs to be done?" autofocus>
+			</header>
+			<section class="main" data-bind="visible: plans().length">
+				<input id="toggle-all" class="toggle-all" data-bind="checked: allCompleted" type="checkbox">
+				<label for="toggle-all">Mark all as complete</label>
+				<ul class="plan-list" data-bind="foreach: filteredPlans">
+					<li data-bind="css: { completed: completed, editing: editing }">
+						<div class="view">
+							<input class="toggle" data-bind="checked: completed" type="checkbox">
+							<label data-bind="text: title, event: { dblclick: $root.editPlan }"></label>
+							<button class="destroy" data-bind="click: $root.remove"></button>
+						</div>
+						<input class="edit" data-bind="value: title, valueUpdate: 'afterkeydown', enterKey: $root.saveEditing, escapeKey: $root.cancelEditing, selectAndFocus: editing, event: { blur: $root.saveEditing }">
+					</li>
+				</ul>
+			</section>
+			<footer class="footer" data-bind="visible: completedCount() || remainingCount()">
+				<span class="plan-count">
+					<strong data-bind="text: remainingCount">0</strong>
+					<span data-bind="text: getLabel(remainingCount)"></span> left
+				</span>
+				<ul class="filters">
+					<li>
+						<a data-bind="css: { selected: showMode() == 'all' }" href="#/all">All</a>
+					</li>
+					<li>
+						<a data-bind="css: { selected: showMode() == 'active' }" href="#/active">Active</a>
+					</li>
+					<li>
+						<a data-bind="css: { selected: showMode() == 'completed' }" href="#/completed">Completed</a>
+					</li>
+				</ul>
+				<button class="clear-completed" data-bind="visible: completedCount, click: removeCompleted">Clear completed</button>
+			</footer>
+		</section>
+		<footer class="info">
+			<h2>Double-click to edit a plan</h2>
+		</footer>
+		<script src="node_modules/knockout/build/output/knockout-latest.js"></script>
+		<script src="node_modules/director/build/director.js"></script>
+		<script src="js/app.js"></script>
+	</body>
+</html>
